@@ -41,7 +41,7 @@ func ResourceXaC123() *schema.Resource {
 				Description: "The image to use for the instance. Changing `image_id` will cause the instance to be destroyed and re-created.",
 			},
 			"batch_num": {
-				Type:        schema.TypeString,
+				Type:        schema.TypeInt,
 				Required:    true,
 				ForceNew:    true,
 				Description: "The batch number you want when deploy.",
