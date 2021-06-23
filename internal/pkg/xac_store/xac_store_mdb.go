@@ -24,19 +24,16 @@ func ResourceXaCStoreMDB() *schema.Resource {
 			"region": {
 				Type:        schema.TypeString,
 				Required:    true,
-				ForceNew:    true,
 				Description: "The region to deploy.",
 			},
 			"uid": {
 				Type:        schema.TypeString,
 				Required:    true,
-				ForceNew:    true,
 				Description: "The uid for business.",
 			},
 			"size": {
 				Type:        schema.TypeString,
 				Required:    true,
-				ForceNew:    true,
 				Description: "The size like super_small/small/medium/big.",
 			},
 		},

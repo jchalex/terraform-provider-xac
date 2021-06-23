@@ -36,7 +36,6 @@ func ResourceXaC007() *schema.Resource {
 			"dimensions": {
 				Type:        schema.TypeList,
 				Required:    true,
-				ForceNew:    true,
 				Description: "The dimension list.",
 				MaxItems:    100,
 				Elem: &schema.Resource{
@@ -53,7 +52,6 @@ func ResourceXaC007() *schema.Resource {
 			"values": {
 				Type:        schema.TypeList,
 				Required:    true,
-				ForceNew:    true,
 				Description: "The feature list.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{

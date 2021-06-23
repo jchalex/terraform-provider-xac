@@ -43,13 +43,11 @@ func ResourceXaC123() *schema.Resource {
 			"batch_num": {
 				Type:        schema.TypeInt,
 				Required:    true,
-				ForceNew:    true,
 				Description: "The batch number you want when deploy.",
 			},
 			"validate_policy_007": {
 				Type:        schema.TypeString,
 				Required:    true,
-				ForceNew:    true,
 				Description: "The 007 policy to validate the server status after each batch deploy.",
 			},
 		},

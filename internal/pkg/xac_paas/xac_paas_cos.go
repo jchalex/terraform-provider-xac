@@ -24,25 +24,21 @@ func ResourceXaCPaaSCOS() *schema.Resource {
 			"region": {
 				Type:        schema.TypeString,
 				Required:    true,
-				ForceNew:    true,
 				Description: "The region to deploy.",
 			},
 			"uid": {
 				Type:        schema.TypeString,
 				Required:    true,
-				ForceNew:    true,
 				Description: "The uid for business.",
 			},
 			"acl": {
 				Type:        schema.TypeString,
 				Required:    true,
-				ForceNew:    true,
 				Description: "The access control list.",
 			},
 			"policy": {
 				Type:        schema.TypeString,
 				Required:    true,
-				ForceNew:    true,
 				Description: "The concrete policy for bucket or object.",
 			},
 		},
