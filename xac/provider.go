@@ -98,7 +98,6 @@ import (
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
 	sts "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sts/v20180813"
 	"github.com/tencentcloudstack/terraform-provider-tencentcloud/tencentcloud/connectivity"
-	"github.com/tencentcloudstack/terraform-provider-tencentcloud/tencentcloud/internal/helper"
 	"github.com/tencentcloudstack/terraform-provider-tencentcloud/tencentcloud/ratelimit"
 )
 
@@ -256,11 +255,13 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 		}
 		// applying STS credentials
 		request := sts.NewAssumeRoleRequest()
-		request.RoleArn = helper.String(assumeRoleArn)
-		request.RoleSessionName = helper.String(assumeRoleSessionName)
-		request.DurationSeconds = helper.IntUint64(assumeRoleSessionDuration)
+		request.RoleArn = &assumeRoleArn
+		request.RoleSessionName = &assumeRoleSessionName
+		var ds uint64 = uint64(assumeRoleSessionDuration)
+		request.DurationSeconds = &ds
+		policy := url.QueryEscape(assumeRolePolicy)
 		if assumeRolePolicy != "" {
-			request.Policy = helper.String(url.QueryEscape(assumeRolePolicy))
+			request.Policy = &policy
 		}
 		ratelimit.Check(request.GetAction())
 		response, err := tcClient.apiV3Conn.UseStsClient().AssumeRole(request)
