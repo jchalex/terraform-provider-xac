@@ -8,6 +8,4 @@ require (
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/hashicorp/terraform-plugin-sdk v1.17.2
 	github.com/mattn/go-colorable v0.1.6 // indirect
-	github.com/pkg/errors v0.9.1
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.193
 )
