@@ -25,13 +25,11 @@ func ResourceXaC123() *schema.Resource {
 			"app": {
 				Type:        schema.TypeString,
 				Required:    true,
-				ForceNew:    true,
 				Description: "The application name in 123.",
 			},
 			"server": {
 				Type:        schema.TypeString,
 				Required:    true,
-				ForceNew:    true,
 				Description: "The server name in 123.",
 			},
 			"image_id": {
