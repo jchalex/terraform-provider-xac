@@ -89,16 +89,8 @@ Elasticsearch
 package xac
 
 import (
-	"net/url"
-	"os"
-	"strconv"
-
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
-	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
-	sts "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sts/v20180813"
-	"github.com/tencentcloudstack/terraform-provider-tencentcloud/tencentcloud/connectivity"
-	"github.com/tencentcloudstack/terraform-provider-tencentcloud/tencentcloud/ratelimit"
 )
 
 const (
@@ -112,10 +104,6 @@ const (
 	PROVIDER_ASSUME_ROLE_SESSION_NAME     = "TENCENTCLOUD_ASSUME_ROLE_SESSION_NAME"
 	PROVIDER_ASSUME_ROLE_SESSION_DURATION = "TENCENTCLOUD_ASSUME_ROLE_SESSION_DURATION"
 )
-
-type TencentCloudClient struct {
-	apiV3Conn *connectivity.TencentCloudClient
-}
 
 func Provider() terraform.ResourceProvider {
 	return &schema.Provider{
@@ -208,73 +196,6 @@ func Provider() terraform.ResourceProvider {
 			"tencentcloud_cos_bucket_policy": &schema.Resource{},
 		},
 
-		ConfigureFunc: providerConfigure,
+		// ConfigureFunc: providerConfigure,
 	}
-}
-
-func providerConfigure(d *schema.ResourceData) (interface{}, error) {
-	secretId := d.Get("secret_id").(string)
-	secretKey := d.Get("secret_key").(string)
-	securityToken := d.Get("security_token").(string)
-	region := d.Get("region").(string)
-	protocol := d.Get("protocol").(string)
-	domain := d.Get("domain").(string)
-
-	// standard client
-	var tcClient TencentCloudClient
-	tcClient.apiV3Conn = &connectivity.TencentCloudClient{
-		Credential: common.NewTokenCredential(
-			secretId,
-			secretKey,
-			securityToken,
-		),
-		Region:   region,
-		Protocol: protocol,
-		Domain:   domain,
-	}
-
-	// assume role client
-	assumeRoleList := d.Get("assume_role").(*schema.Set).List()
-	if len(assumeRoleList) == 1 {
-		assumeRole := assumeRoleList[0].(map[string]interface{})
-		assumeRoleArn := assumeRole["role_arn"].(string)
-		assumeRoleSessionName := assumeRole["session_name"].(string)
-		assumeRoleSessionDuration := assumeRole["session_duration"].(int)
-		assumeRolePolicy := assumeRole["policy"].(string)
-		if assumeRoleSessionDuration == 0 {
-			var err error
-			if duration := os.Getenv(PROVIDER_ASSUME_ROLE_SESSION_DURATION); duration != "" {
-				assumeRoleSessionDuration, err = strconv.Atoi(duration)
-				if err != nil {
-					return nil, err
-				}
-				if assumeRoleSessionDuration == 0 {
-					assumeRoleSessionDuration = 7200
-				}
-			}
-		}
-		// applying STS credentials
-		request := sts.NewAssumeRoleRequest()
-		request.RoleArn = &assumeRoleArn
-		request.RoleSessionName = &assumeRoleSessionName
-		var ds uint64 = uint64(assumeRoleSessionDuration)
-		request.DurationSeconds = &ds
-		policy := url.QueryEscape(assumeRolePolicy)
-		if assumeRolePolicy != "" {
-			request.Policy = &policy
-		}
-		ratelimit.Check(request.GetAction())
-		response, err := tcClient.apiV3Conn.UseStsClient().AssumeRole(request)
-		if err != nil {
-			return nil, err
-		}
-		// using STS credentials
-		tcClient.apiV3Conn.Credential = common.NewTokenCredential(
-			*response.Response.Credentials.TmpSecretId,
-			*response.Response.Credentials.TmpSecretKey,
-			*response.Response.Credentials.Token,
-		)
-	}
-
-	return &tcClient, nil
 }
