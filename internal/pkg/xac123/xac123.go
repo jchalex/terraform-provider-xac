@@ -53,54 +53,27 @@ func ResourceXaC123() *schema.Resource {
 }
 
 func resourceXaC123Create(d *schema.ResourceData, meta interface{}) error {
-	app := ""
-	server := ""
-	if v, ok := d.GetOk("app"); ok {
-		app = v.(string)
-	}
-	if v, ok := d.GetOk("server"); ok {
-		server = v.(string)
-	}
-	sendRequest("create", app, server)
+	// app := ""
+	// server := ""
+	// if v, ok := d.GetOk("app"); ok {
+	// 	app = v.(string)
+	// }
+	// if v, ok := d.GetOk("server"); ok {
+	// 	server = v.(string)
+	// }
+	// sendRequest("create", app, server)
 	return nil
 }
 
 func resourceXaC123Read(d *schema.ResourceData, meta interface{}) error {
-	app := ""
-	server := ""
-	if v, ok := d.GetOk("app"); ok {
-		app = v.(string)
-	}
-	if v, ok := d.GetOk("server"); ok {
-		server = v.(string)
-	}
-	sendRequest("read", app, server)
 	return nil
 }
 
 func resourceXaC123Update(d *schema.ResourceData, meta interface{}) error {
-	app := ""
-	server := ""
-	if v, ok := d.GetOk("app"); ok {
-		app = v.(string)
-	}
-	if v, ok := d.GetOk("server"); ok {
-		server = v.(string)
-	}
-	sendRequest("update", app, server)
 	return nil
 }
 
 func resourceXaC123Delete(d *schema.ResourceData, meta interface{}) error {
-	app := ""
-	server := ""
-	if v, ok := d.GetOk("app"); ok {
-		app = v.(string)
-	}
-	if v, ok := d.GetOk("server"); ok {
-		server = v.(string)
-	}
-	sendRequest("delete", app, server)
 	return nil
 }
 
